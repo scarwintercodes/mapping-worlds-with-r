@@ -57,6 +57,14 @@ print("Plots displayed. Notice the shape difference!")
 
 print("Getting world cities sf object..")
 
+# Step 2: Get world countries data as an sf object
+# This is vector data (polygons)
+print("Getting world countries sf object...")
+
+world_countries <- rnaturalearth::ne_countries(
+  scale = 'medium', returnclass = 'sf')
+print("Data loaded into 'world_countries'.")
+
 world_cities <- rnaturalearth::ne_download(
   scale = "medium",
   type = "populated_places",
@@ -66,3 +74,33 @@ world_cities <- rnaturalearth::ne_download(
 
 print("Data loaded into 'world_cities")
 print(world_cities)
+
+# Inspect world_countries sf object
+# Print the whole object -- seeing table and geometry
+print("---Full sf object (first few rows")
+print(world_countries)
+
+# Step 5: Check the class. What kind of object is this?
+print("---Object Class---")
+print(class(world_countries))
+print("It's both 'sf' and 'data frame'")
+
+# Step 6: Use glimpse() for a compact summary of attributes
+print("--- Attribute Summary using glimpse() ---")
+
+dplyr::glimpse(world_countries)
+
+
+# Step 7: Look at JUST the attribute table/regular data frame
+print("--- Attribute Table only using (st_drop_geometry)")
+
+world_attributes_only <- sf::st_drop_geometry(world_countries)
+print(head(world_attributes_only))
+print(class(world_attributes_only)) # <- Should only be dataframe
+
+# Step 8: Look ay JUSt the geometry column
+print("--- Geometry column only using (st_geometry")
+
+world_geometry_only <- sf::st_geometry(world_countries)
+print(world_geometry_only[1:3]) # <- Show geometry info for first 3  countries
+print(class(world_geometry_only)) # <- Should be 'sfc' (simple feature column) and sfc_MULTIPOLYGON
