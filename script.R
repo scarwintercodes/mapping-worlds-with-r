@@ -38,6 +38,31 @@ plot(sf::st_geometry(world_sf),
      main = "Original (EPSG:4326)",
      key.pos = NULL, reset = FALSE,
      border="grey")
-     ))
+
+plot(sf::st_geometry(world_robinson_sf),
+     main = "Transformed (Robinson)",
+     key.pos = NULL, reset = FALSE,
+     border="blue"
+     )
+
+par(mfrow = c(1,1))
+print("Plots displayed. Notice the shape difference!")
 
 # updated Robinson plot
+
+######## Chapter 2
+
+# Get world cities data as an sf object 
+# This is vector data (points, precision)
+
+print("Getting world cities sf object..")
+
+world_cities <- rnaturalearth::ne_download(
+  scale = "medium",
+  type = "populated_places",
+  category = "cultural", #interested in what the different categories are
+  returnclass = "sf" #return as sf object
+)
+
+print("Data loaded into 'world_cities")
+print(world_cities)
