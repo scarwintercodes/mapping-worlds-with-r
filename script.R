@@ -104,3 +104,15 @@ print("--- Geometry column only using (st_geometry")
 world_geometry_only <- sf::st_geometry(world_countries)
 print(world_geometry_only[1:3]) # <- Show geometry info for first 3  countries
 print(class(world_geometry_only)) # <- Should be 'sfc' (simple feature column) and sfc_MULTIPOLYGON
+
+# Plot comparison using ggplot
+
+plot_original <- ggplot() + geom_sf(data = world_countries, linewidth = 0.2) + ggtitle("Original (EPSG:4326)") + theme_minimal()
+plot_original
+
+plot_transformed <- ggplot() + geom_sf(data = world_robinson_sf, linewidth = 0.2) + ggtitle("Transformed (Robinson)") + theme_minimal()
+plot_transformed
+
+#Print side-by-side comparison (use patchwork package)
+pacman::p_load(patchwork)
+print(plot_original / plot_transformed)
