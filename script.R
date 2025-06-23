@@ -196,7 +196,7 @@ pacman::p_load(sf, dplyr, rnaturalearth) # Need rnaturalearth for continent join
 # Let's imagine we only need name, iso code,
 # and geometry for our map
 # Load world_boundaries.gpkg
-world_boundaries_loaded <- sf::st_read("world_boundaries.gpkg")
+world_boundaries_loaded <- sf::st_read("data/world_boundaries.gpkg")
 sf::st_geometry(
   world_boundaries_loaded
 ) <- "geometry" # name geometry field
