@@ -192,4 +192,46 @@ assign(
 print("Loading packages...")
 pacman::p_load(sf, dplyr, rnaturalearth) # Need rnaturalearth for continent join
 
+# Step 2: Select only needed columns
+# Let's imagine we only need name, iso code,
+# and geometry for our map
+# Load world_boundaries.gpkg
+world_boundaries_loaded <- sf::st_read("world_boundaries.gpkg")
+sf::st_geometry(
+  world_boundaries_loaded
+) <- "geometry" # name geometry field
+print("Selecting specific columns...")
+# Use the pipe |> to pass the data through steps
+world_selected <- world_boundaries_loaded |>
+  # Keep only these columns
+  # (adjust names based on your actual data!)
+  # Use any_of() to avoid errors if a column doesn't exist
+  # Ensure the geometry column is always included when selecting
+  dplyr::select(
+    dplyr::any_of(
+      c("NAME_ENGL", "ISO3_CODE")), geometry)
+print("Columns selected:")
+print(head(world_selected))
+# Step 3: Rename columns for easier use
+print("Renaming columns...")
+world_renamed <- world_selected |>
+  dplyr::rename(
+    country_name = NAME_ENGL, # New name = Old name
+    iso3 = ISO3_CODE) # Adjust old names based on your data!
+# geometry column usually keeps its name)
+print("Columns renamed:")
+print(head(world_renamed))
+# Store the cleaned data (before filtering for Africa)
+# for the next step
+assign("world_renamed", world_cleaned, envir = .GlobalEnv)
+# Step 4: Filter rows - e.g., keep only African countries
+# First, we need continent info, which wasn't in our
+# simplified gpkg.
+# Let's reload the rnaturalearth data which has continents.
+print("Reloading rnaturalearth data to get continents for
+filtering example...")
+world_ne <- rnaturalearth::ne_countries(
+  scale = "medium", returnclass = "sf") |>
+  dplyr::select(adm0_a3, continent) |> # Keep ISO and continent
+  sf::st_drop_geometry() # We only need the table for joining
 
