@@ -116,3 +116,73 @@ plot_transformed
 #Print side-by-side comparison (use patchwork package)
 pacman::p_load(patchwork)
 print(plot_original / plot_transformed)
+
+######## Chapter 3
+# Step 2: Load the GeoPackage file using st_read()
+# We provide the RELATIVE PATH from the project root folder.
+# Our file is inside the 'data' subfolder.
+
+# Step 1: Load necessary packages
+print("Loading packages...")
+# Ensure pacman is installed and loaded if you use it
+if (
+  !requireNamespace("pacman", quietly = TRUE)
+) install.packages("pacman")
+pacman::p_load(sf, dplyr) # Need sf for st_read,
+# dplyr for glimpse later
+print("Packages ready.")
+# Step 2: Load the GeoPackage file using st_read()
+# We provide the RELATIVE PATH from the project root folder.
+# Our file is inside the 'data' subfolder.
+print(
+  "Loading vector data from data/world_boundaries.gpkg..."
+)
+world_boundaries_loaded <- sf::st_read(
+  "data/world_boundaries.gpkg"
+)
+
+# Step 3: Inspect the loaded data
+print("Inspecting the data...")
+print(class(world_boundaries_loaded))
+print("First few rows:")
+print(head(world_boundaries_loaded))
+print("Coordinate Reference System:")
+print(sf::st_crs(world_boundaries_loaded))
+# Make the object available outside the chunk if needed
+assign(
+  "world_boundaries_loaded",
+  world_boundaries_loaded,
+  envir = .GlobalEnv
+)
+
+# --- Script: chapter_3_load_csv.R --- #
+# (Can be in the same script file)
+# Step 1: Load necessary packages
+print("Loading packages...")
+pacman::p_load(readr, dplyr) # readr for read_csv, dplyr for glimpse
+print("Packages ready.")
+# Step 2: Load the CSV file using read_csv()
+# Again, use the relative path from the project root.
+print(
+  "Loading tabular data country_indicators.csv..."
+)
+country_indicators_loaded <- readr::read_csv(
+  "country_indicators.csv"
+)
+# Step 3: Inspect the loaded data
+print("CSV data loaded successfully!")
+print("--- Object Class ---")
+print(
+  class(country_indicators_loaded)
+) # Should be 'spec_tbl_df', 'tbl_df', 'tbl', 'data.frame'
+print("--- First few rows ---")
+print(head(country_indicators_loaded))
+print("--- Column Summary (glimpse) ---")
+dplyr::glimpse(
+  country_indicators_loaded
+) # Useful for seeing column types
+# Make the object available outside the chunk if needed
+assign(
+  "country_indicators_loaded",
+  country_indicators_loaded, envir = .GlobalEnv)
+
