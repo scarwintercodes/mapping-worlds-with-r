@@ -202,7 +202,7 @@ sf::st_geometry(
 ) <- "geometry" # name geometry field
 print("Selecting specific columns...")
 # Use the pipe |> to pass the data through steps
-world_selected <- world_boundaries_loaded |>
+world_selected <- world_boundaries_loaded %>% 
   # Keep only these columns
   # (adjust names based on your actual data!)
   # Use any_of() to avoid errors if a column doesn't exist
@@ -214,7 +214,7 @@ print("Columns selected:")
 print(head(world_selected))
 # Step 3: Rename columns for easier use
 print("Renaming columns...")
-world_renamed <- world_selected |>
+world_renamed <- world_selected %>% 
   dplyr::rename(
     country_name = NAME_ENGL, # New name = Old name
     iso3 = ISO3_CODE) # Adjust old names based on your data!
@@ -223,7 +223,7 @@ print("Columns renamed:")
 print(head(world_renamed))
 # Store the cleaned data (before filtering for Africa)
 # for the next step
-assign("world_renamed", world_cleaned, envir = .GlobalEnv)
+assign("world_renamed", world_renamed, envir = .GlobalEnv)
 # Step 4: Filter rows - e.g., keep only African countries
 # First, we need continent info, which wasn't in our
 # simplified gpkg.
