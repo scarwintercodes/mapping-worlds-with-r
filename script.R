@@ -186,3 +186,10 @@ assign(
   "country_indicators_loaded",
   country_indicators_loaded, envir = .GlobalEnv)
 
+# --- Script: chapter_3_cleaning.R --- #
+# (Can be in the same script file)
+# Step 1: Ensure packages and data are ready
+print("Loading packages...")
+pacman::p_load(sf, dplyr, rnaturalearth) # Need rnaturalearth for continent join
+
+
