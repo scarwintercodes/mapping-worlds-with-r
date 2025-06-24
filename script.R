@@ -235,3 +235,6 @@ world_ne <- rnaturalearth::ne_countries(
   dplyr::select(adm0_a3, continent) |> # Keep ISO and continent
   sf::st_drop_geometry() # We only need the table for joining
 
+# join continent info to renamed boundaries
+world_renamed_with_cont <- world_renamed %>% 
+  dplyr::left_join(world_ne, by = c("iso3" = "adm0_a3"))
