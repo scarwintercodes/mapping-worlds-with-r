@@ -238,3 +238,64 @@ world_ne <- rnaturalearth::ne_countries(
 # join continent info to renamed boundaries
 world_renamed_with_cont <- world_renamed %>% 
   dplyr::left_join(world_ne, by = c("iso3" = "adm0_a3"))
+
+###### SPATIAL DATA CLEANING ##########
+africa_only <- world_renamed_with_cont |>
+  dplyr::filter(continent == "Africa")
+print("Filtered data for Africa:")
+print(africa_only) # Show the filtered sf object
+
+nrow(africa_only)
+
+
+africa_valid_geom <- africa_only %>% 
+  dplyr::filter(!sf::st_is_empty(geometry)) %>% #remove features where geometry is empty
+  sf::st_make_valid() %>%  #try to make geometries valid
+  # one more filter in case st_make_valid resulted in empty ones
+  dplyr::filter(!sf::st_is_empty(geometry))
+
+nrow(africa_valid_geom)
+
+
+######### JOINING DATA ############
+## load country indicator data
+country_indicators_loaded <- read_csv("data/country_indicators.csv")
+
+# preview common values
+print(head(world_renamed$iso3))
+print(head(country_indicators_loaded$iso3c))
+
+# Perform the left join
+world_data_joined <- world_renamed %>% 
+  left_join(
+    country_indicators_loaded,
+    by = c("iso3" = "iso3c")
+  )
+
+# QC the result
+
+## glimpse
+glimpse(world_data_joined)
+
+## NA count, number of countries with NA in population, indicates no match
+na_count <- sum(is.na(world_data_joined$population))
+
+print(na_count)
+
+###### SAVE THE JOINED/CLEANED DATA #######
+
+# Make the joined object available in the global environment
+assign(
+  "world_data_joined", world_data_joined,
+  envir = .GlobalEnv
+)
+
+# save object to a .gpkg file format
+
+# define file path
+output_filename <- "world_data_cleaned_joined.gpkg"
+message("Saving cleaned data to: ", output_filename)
+
+# Write the GeoPackage
+st_write(world_data_joined, output_filename, delete_layer = TRUE)
+message("Data saved successfully!")
