@@ -305,4 +305,16 @@ message("Data saved successfully!")
 
 ####### CHAPTER 4
 
+map_plot_basic <- ggplot(world_data_joined) + #new layer with +
+  geom_sf(
+    mapping = aes(fill = gdp_per_capita),
+    color = "white",
+    linewidth = 0.1
+  ) + #layer
+  labs(
+    title = "GDP per Capita (2020)",
+    fill = "US Dollars"
+  ) +
+  theme_minimal()
 
+map_plot_basic
