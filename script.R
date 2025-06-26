@@ -33,6 +33,9 @@ print("Plotting comparison (original vs transformed)...")
 
 par(mfrow = c(1,2)) #set plots side by side
 
+#adjust plot margins
+par(mar = c(1, 1, 1, 1))
+
 # original sf plot
 plot(sf::st_geometry(world_sf),
      main = "Original (EPSG:4326)",
@@ -167,7 +170,7 @@ print(
   "Loading tabular data country_indicators.csv..."
 )
 country_indicators_loaded <- readr::read_csv(
-  "country_indicators.csv"
+  "data/country_indicators.csv"
 )
 # Step 3: Inspect the loaded data
 print("CSV data loaded successfully!")
@@ -299,3 +302,7 @@ message("Saving cleaned data to: ", output_filename)
 # Write the GeoPackage
 st_write(world_data_joined, output_filename, delete_layer = TRUE)
 message("Data saved successfully!")
+
+####### CHAPTER 4
+
+
