@@ -349,3 +349,4 @@ map_plot_viridis <- ggplot2::ggplot(data = world_data_joined) +
                  legend.key.width = grid::unit(1.5, "cm"))
 # Display the map
 print(map_plot_viridis)
+
