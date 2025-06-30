@@ -318,3 +318,34 @@ map_plot_basic <- ggplot(world_data_joined) + #new layer with +
   theme_minimal()
 
 map_plot_basic
+
+# --- Script: chapter_4_custom_colors.R ---
+# Ensure required packages are installed and loaded
+pacman::p_load(sf, ggplot2, scales)
+# Create a choropleth using the Viridis 'rocket' palette with log10
+# scaling
+map_plot_viridis <- ggplot2::ggplot(data = world_data_joined) +
+  ggplot2::geom_sf(
+    mapping = ggplot2::aes(fill = gdp_per_capita),
+    color = "white",
+    linewidth = 0.1
+  ) +
+  scale_fill_viridis_c(
+    option = "rocket", # Choose a specific Viridis palette
+    direction = -1, # reverse palette so that lighter colors are
+    # associated with lower values, and darker with higher
+    name = "US dollars", # legend title
+    na.value = "grey80", # color for missing values
+    trans = "log10", # Apply log10 transformation because density
+    # is highly skewed (many low values, few very high values)
+    # Use special labels for log scale
+    # (requires scales package)
+    labels = scales::label_log(digits = 2) # Use special labels for
+    # log scale (requires scales package)
+  ) +
+  ggplot2::labs(title = "GDP per capita") +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(legend.position = "bottom",
+                 legend.key.width = grid::unit(1.5, "cm"))
+# Display the map
+print(map_plot_viridis)
